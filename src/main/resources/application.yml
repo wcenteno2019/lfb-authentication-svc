@@ -1,0 +1,11 @@
+server:
+  port: 90
+management:
+  endpoints.web.base-path: /
+spring:
+  profiles:
+    active: local
+configuration.jwt:
+  secret: helloWorld
+  expiration-time: 60000
+  issuer: Loyalty

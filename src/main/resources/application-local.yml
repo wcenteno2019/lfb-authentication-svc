@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=lifebank_db
+    username: postgres
+    password: Bengine
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 10000
+      idle-timeout: 600000
+      max-lifetime: 14400000
+      minimum-idle: 5
+    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        default_schema: lifebank_db
+configuration.encrypt.key: myaes12345KeyEnc
+configuration.encrypt.initv: myInitVector1235
