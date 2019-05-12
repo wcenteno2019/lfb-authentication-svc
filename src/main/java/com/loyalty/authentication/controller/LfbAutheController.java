@@ -3,6 +3,8 @@ package com.loyalty.authentication.controller;
 import com.loyalty.authentication.pojos.RequestValidaCliente;
 import com.loyalty.authentication.process.AuthenticationProcess;
 import com.loyalty.authentication.repository.RepositoryUsuario;
+import com.loyalty.authentication.repository.RepositoryUsuarioToken;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +19,14 @@ public class LfbAutheController {
     @Autowired
     private RepositoryUsuario repositoryUsuario;
     @Autowired
+    private RepositoryUsuarioToken repositoryUsuarioToken;
+    @Autowired
     Environment env;
     @PostMapping("/validar-user")
-    public ResponseEntity validarUser(@RequestBody RequestValidaCliente request){
-        AuthenticationProcess authprocess =  new AuthenticationProcess(repositoryUsuario,env);
-
-        return authprocess.process(request);
+    public ResponseEntity validarUser(@RequestBody RequestValidaCliente request, HttpServletRequest httpRequest){
+        AuthenticationProcess authprocess =  new AuthenticationProcess(repositoryUsuario,env,repositoryUsuarioToken);
+        String ip = httpRequest.getRemoteAddr();
+        return authprocess.process(request,ip);
 
 
     }

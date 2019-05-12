@@ -6,6 +6,6 @@ spring:
   profiles:
     active: local
 configuration.jwt:
-  secret: helloWorld
+  secret: onlineSystem
   expiration-time: 60000
-  issuer: Loyalty
+  issuer: LifeBank

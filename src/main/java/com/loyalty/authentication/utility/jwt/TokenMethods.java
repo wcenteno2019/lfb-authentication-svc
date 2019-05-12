@@ -25,10 +25,8 @@ public class TokenMethods {
 	
 	public String createToken(Map<String, Object> claims) {
 		return TokenBuilder.builder()
-
 			.setSignature(SignatureAlgorithm.HS512, env.getProperty("configuration.jwt.secret"))
 			.addClaims(claims)
-			
 			.build();
 	}
 	

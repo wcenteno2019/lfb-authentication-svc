@@ -22,6 +22,12 @@ public class Usuario {
     @Column(name="usr_correo")
     private String correo;
 
+    @Column(name = "usr_estado")
+    private String estado;
+
+    @Column(name = "usr_conteo_fallido")
+    private int conteoBloqueo;
+
     public int getId() {
         return id;
     }
@@ -68,5 +74,21 @@ public class Usuario {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public int getConteoBloqueo() {
+        return conteoBloqueo;
+    }
+
+    public void setConteoBloqueo(int conteoBloqueo) {
+        this.conteoBloqueo = conteoBloqueo;
     }
 }
