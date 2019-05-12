@@ -1,5 +1,5 @@
 server:
-  port: 90
+  port: 9092
 management:
   endpoints.web.base-path: /
 spring:

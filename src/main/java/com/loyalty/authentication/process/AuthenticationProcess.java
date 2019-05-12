@@ -6,6 +6,8 @@ import com.loyalty.authentication.pojos.ResponseAunthentication;
 import com.loyalty.authentication.pojos.database.Usuario;
 import com.loyalty.authentication.repository.RepositoryUsuario;
 import com.loyalty.authentication.repository.RepositoryUsuarioToken;
+import com.loyalty.authentication.utility.MDCHandler;
+import com.loyalty.authentication.utility.TrackingHandler;
 import com.loyalty.authentication.utility.jwt.TokenCreated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +35,17 @@ public class AuthenticationProcess {
         ResponseAunthentication response = new ResponseAunthentication();
         int conteo=0;
         try {
+            MDCHandler.setContextVariables(request.getUser(), TrackingHandler.getHashedTracking(request.getUser()), env.getProperty("spring.application.name"),env.getProperty("hostname"),env.getProperty("ip"),null);
             ShaEncryptor shaEncryptor = new ShaEncryptor();
             String encryptedText = shaEncryptor.getEncrypt(shaEncryptor.aplicarBase64(request.getUser())+shaEncryptor.aplicarBase64(request.getPassword()));
+            log.info("Resultado de lo encriptacion: " + encryptedText);
             usuario = repositoryUsuario.validaUsuario(request.getUser(), encryptedText);
             if(usuario != null) {
                 TokenCreated tokenCreated = new TokenCreated(env,repositoryUsuarioToken);
                 LocalDateTime fechaExpiracion = LocalDateTime.now().plusMinutes(30);
+                log.info("fecha de expiracion de token: " + fechaExpiracion);
                 String jwt = tokenCreated.createdToken(ip,usuario.getId(), fechaExpiracion);
+                log.info("Creando el JWT " + jwt);
                 response.setTkn(jwt);
                 conteo = repositoryUsuario.actualizarConteoFallido(usuario.getUsuario(), 0);
                 tokenCreated.saveToken(usuario.getId(),fechaExpiracion, jwt);
@@ -56,6 +62,7 @@ public class AuthenticationProcess {
                 }
             }
         }catch (Exception e){
+            log.error("Exception in valida user endpoint, e: {}", e);
             e.printStackTrace();
             return new ResponseEntity("", HttpStatus.BAD_REQUEST);
 

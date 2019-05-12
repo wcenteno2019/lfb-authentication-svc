@@ -13,6 +13,7 @@ public class LfbAuthenticationSvcApplication {
 
 	public static void main(String[] args) {
 		try {
+			System.setProperty("hostname", InetAddress.getLocalHost().getHostName());
 			System.setProperty("ip", InetAddress.getLocalHost().getHostAddress());
 			SpringApplication.run(LfbAuthenticationSvcApplication.class, args);
 		}catch (UnknownHostException e){

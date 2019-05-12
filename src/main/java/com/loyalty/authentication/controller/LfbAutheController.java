@@ -7,6 +7,7 @@ import com.loyalty.authentication.repository.RepositoryUsuarioToken;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,9 +25,14 @@ public class LfbAutheController {
     Environment env;
     @PostMapping("/validar-user")
     public ResponseEntity validarUser(@RequestBody RequestValidaCliente request, HttpServletRequest httpRequest){
-        AuthenticationProcess authprocess =  new AuthenticationProcess(repositoryUsuario,env,repositoryUsuarioToken);
-        String ip = httpRequest.getRemoteAddr();
-        return authprocess.process(request,ip);
+        try {
+            AuthenticationProcess authprocess = new AuthenticationProcess(repositoryUsuario, env, repositoryUsuarioToken);
+            String ip = httpRequest.getRemoteAddr();
+            return authprocess.process(request, ip);
+        }catch (Exception e){
+            return new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
 
 
     }
